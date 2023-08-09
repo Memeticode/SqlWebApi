@@ -21,7 +21,7 @@ public interface ISqlTableReference: IEquatable<ISqlTableReference>, IJsonSerial
     [Required][MaxLength(128)] string Name { get; set; }
 }
 
-public interface ISqlDataRecord: IDictionary<string, object>, IJsonSerializable
+public interface ISqlDataRecord: IDictionary<string, object>, ICloneable, IJsonSerializable
 {
     JsonObject ToJsonObject();
 }
@@ -70,6 +70,12 @@ public interface ISqlDataType : IEquatable<ISqlDataType>, IJsonSerializable
 
 
 //// "Under the hood" interfaces
+public interface ISqlDataRecordManager
+{
+    ISqlDataRecord CreateNewRecord(ISqlTableSchema schema);
+}
+
+
 public interface ISqlConnectionFactory
 {
     ISqlConnection CreateConnection(ISqlTableReference tableReference);

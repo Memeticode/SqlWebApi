@@ -58,16 +58,3 @@ public class SqlDataTypeConverter : JsonConverter<ISqlDataType>
     }
 }
 
-//public class SqlDataTypeConverter : JsonConverter<SqlDataType>
-//{
-//    public override SqlDataType ReadJson(JsonReader reader, Type objectType, SqlDataType existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
-//    {
-//        var res = serializer.Deserialize<SqlDataType>(reader);
-//        return res;
-//    }
-
-//    public override void WriteJson(JsonWriter writer, SqlDataType value, Newtonsoft.Json.JsonSerializer serializer)
-//    {
-//        serializer.Serialize(writer, value);
-//    }
-//}

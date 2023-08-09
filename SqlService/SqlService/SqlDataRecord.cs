@@ -33,6 +33,10 @@ public class SqlDataRecord : ISqlDataRecord
     public static ISqlDataRecord CreateFromJson(string json)
     {
         var data = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+        return CreateFromDictionary(data);
+    }
+    public static ISqlDataRecord CreateFromDictionary(Dictionary<string, object> data)
+    {
         var record = new SqlDataRecord();
         foreach (var item in data)
         {
@@ -40,6 +44,7 @@ public class SqlDataRecord : ISqlDataRecord
         }
         return record;
     }
+
     public string ToJsonString() => ToJsonObject().ToString();
     public JsonObject ToJsonObject()
     {
@@ -51,6 +56,24 @@ public class SqlDataRecord : ISqlDataRecord
             jsonObject.Add(item.Key, jsonNode);
         }
         return jsonObject;
+    }
+    public object Clone()
+    {
+        SqlDataRecord clonedRecord = new SqlDataRecord();
+        foreach (var kvp in _data)
+        {
+            // If the value is a reference type and implement ICloneable, clone it
+            if (kvp.Value is ICloneable cloneableValue)
+            {
+                clonedRecord._data[kvp.Key] = cloneableValue.Clone();
+            }
+            else
+            {
+                // If the value is a value type or does not implement ICloneable, assign it directly
+                clonedRecord._data[kvp.Key] = kvp.Value;
+            }
+        }
+        return clonedRecord;
     }
 
 
@@ -87,6 +110,5 @@ public class SqlDataRecord : ISqlDataRecord
             array[arrayIndex++] = new KeyValuePair<string, object>(item.Key, item.Value);
         }
     }
-
 
 }
